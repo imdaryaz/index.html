@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маршрут Темиртау - Аэропорт Астаны</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=4d2e2e9e-e4e9-4c7a-8c22-c2a1854972d3&lang=ru_RU" type="text/javascript"></script>
+    <style>
+        html, body, #map {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <script>
+        ymaps.ready(function () {
+            var startPoint = [50.05494, 72.95444]; // Темиртау, проспект Мира, 102/4
+            var endPoint = [51.0222, 71.4669]; // Аэропорт Астаны
+
+            var map = new ymaps.Map("map", {
+                center: startPoint,
+                zoom: 7
+            });
+
+            var route = new ymaps.multiRouter.MultiRoute({
+                referencePoints: [startPoint, endPoint],
+                params: { routingMode: "auto" }
+            }, {
+                routeStrokeColor: "#0000FF", // Голубая линия
+                routeActiveStrokeWidth: 6
+            });
+
+            route.model.events.add("requestsuccess", function () {
+                var activeRoute = route.getActiveRoute();
+                if (activeRoute) {
+                    var time = activeRoute.properties.get("duration").text;
+                    alert("Время в пути: " + time);
+                }
+            });
+
+            var endPlacemark = new ymaps.Placemark(endPoint, {
+                hintContent: "Аэропорт Астаны",
+                balloonContent: "Конечная точка маршрута"
+            }, {
+                preset: "islands#redDotIcon" // Красный маркер
+            });
+
+            map.geoObjects.add(route);
+            map.geoObjects.add(endPlacemark);
+        });
+    </script>
+</body>
+</html>
