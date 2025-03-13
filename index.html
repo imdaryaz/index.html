@@ -6,20 +6,36 @@
     <title>Маршрут от Темиртау до Астаны</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=ВАШ_API_КЛЮЧ&lang=ru_RU" type="text/javascript"></script>
     <style>
-        html, body, #map {
+        html, body {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #map {
+            width: 100%;
+            height: 90vh;
+        }
+        #route-info {
+            width: 100%;
+            padding: 10px;
+            background: #f0f0f0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
+    <div id="route-info">Рассчитываем маршрут...</div>
 
     <script>
         ymaps.ready(function () {
-            var startPoint = "Темиртау, проспект Мира, 102/4"; // Начальная точка
+            var startPoint = "Темиртау, проспект Мира, 102/4, Детский технопарк"; // Начальная точка
             var endPoint = "Международный аэропорт Нурсултана Назарбаева, Астана"; // Конечная точка
 
             var myMap = new ymaps.Map("map", {
@@ -44,7 +60,7 @@
                 if (routes.length) {
                     var time = routes[0].properties.get("duration").text;
                     var distance = routes[0].properties.get("distance").text;
-                    alert("Примерное время пути: " + time + "\nРасстояние: " + distance);
+                    document.getElementById("route-info").innerText = "Примерное время пути: " + time + " | Расстояние: " + distance;
                 }
             });
         });
