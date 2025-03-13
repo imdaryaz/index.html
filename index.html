@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Маршрут от Темиртау до Астаны</title>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=4d2e2e9e-e4e9-4c7a-8c22-c2a1854972d3&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ВАШ_API_КЛЮЧ&lang=ru_RU" type="text/javascript"></script>
     <style>
         html, body {
             width: 100%;
@@ -21,11 +21,12 @@
         }
         #route-info {
             width: 100%;
-            padding: 10px;
-            background: #f0f0f0;
+            padding: 15px;
+            background: #f8f9fa;
             text-align: center;
             font-size: 18px;
             font-weight: bold;
+            border-top: 2px solid #007bff;
         }
     </style>
 </head>
@@ -35,11 +36,11 @@
 
     <script>
         ymaps.ready(function () {
-            var startPoint = "Темиртау, проспект Мира, 102/4, Детский технопарк"; // Начальная точка
+            var startPoint = "Темиртау, проспект Мира, 102/4"; // Начальная точка
             var endPoint = "Международный аэропорт Нурсултана Назарбаева, Астана"; // Конечная точка
 
             var myMap = new ymaps.Map("map", {
-                center: [50.05, 72.95], // Центральная точка между городами
+                center: [50.05, 72.95], // Примерная центральная точка маршрута
                 zoom: 7
             });
 
@@ -56,11 +57,13 @@
             myMap.geoObjects.add(multiRoute);
 
             multiRoute.model.events.add("requestsuccess", function () {
-                var routes = multiRoute.getRoutes();
-                if (routes.length) {
-                    var time = routes[0].properties.get("duration").text;
-                    var distance = routes[0].properties.get("distance").text;
+                var activeRoute = multiRoute.getActiveRoute();
+                if (activeRoute) {
+                    var time = activeRoute.properties.get("duration").text;
+                    var distance = activeRoute.properties.get("distance").text;
                     document.getElementById("route-info").innerText = "Примерное время пути: " + time + " | Расстояние: " + distance;
+                } else {
+                    document.getElementById("route-info").innerText = "Не удалось рассчитать маршрут.";
                 }
             });
         });
