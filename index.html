@@ -24,7 +24,9 @@
             font-size: 18px;
             font-family: Arial, sans-serif;
             text-align: center;
+            z-index: 1000;
         }
+        /* Модальное окно */
         #imageModal {
             display: none;
             position: fixed;
@@ -35,20 +37,37 @@
             background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            z-index: 2000;
         }
         #imageModal img {
-            max-width: 80%;
+            max-width: 90%;
             max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+        #closeModal {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
     <div id="info">Время в пути: рассчитывается...<br>Расстояние: рассчитывается...</div>
-    <div id="imageModal" onclick="this.style.display='none'">
+
+    <!-- Модальное окно -->
+    <div id="imageModal">
         <img id="modalImage" src="2025-03-17_20-07-33.png" alt="Аэропорт Астаны">
+        <button id="closeModal">Закрыть</button>
     </div>
-    
+
     <script>
         ymaps.ready(function () {
             var startPoint = [50.05494, 72.95444]; // Темиртау, проспект Мира 102/4
@@ -86,7 +105,11 @@
             endPlacemark.events.add('click', function () {
                 document.getElementById('imageModal').style.display = 'flex';
             });
-            
+
+            document.getElementById('closeModal').addEventListener('click', function () {
+                document.getElementById('imageModal').style.display = 'none';
+            });
+
             map.geoObjects.add(route);
             map.geoObjects.add(endPlacemark);
         });
