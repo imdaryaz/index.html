@@ -3,69 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Маршрут от Темиртау до Астаны</title>
+    <title>Маршрут Темиртау - Аэропорт Астаны</title>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=4d2e2e9e-e4e9-4c7a-8c22-c2a1854972d3&lang=ru_RU" type="text/javascript"></script>
     <style>
-        html, body {
+        html, body, #map {
             width: 100%;
-            height: 100%;
+            height: 100vh;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
+        }
+        #info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #imageModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
             align-items: center;
         }
-        #map {
-            width: 100%;
-            height: 90vh;
-        }
-        #route-info {
-            width: 100%;
-            padding: 15px;
-            background: #f8f9fa;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            border-top: 2px solid #007bff;
+        #imageModal img {
+            max-width: 80%;
+            max-height: 80%;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
-    <div id="route-info">Рассчитываем маршрут...</div>
-
+    <div id="info">Время в пути: рассчитывается...<br>Расстояние: рассчитывается...</div>
+    <div id="imageModal" onclick="this.style.display='none'">
+        <img id="modalImage" src="2025-03-17_20-07-33.png" alt="Аэропорт Астаны">
+    </div>
+    
     <script>
         ymaps.ready(function () {
-            var startPoint = "Темиртау, проспект Мира, 102/4"; // Начальная точка
-            var endPoint = "Международный аэропорт Нурсултана Назарбаева, Астана"; // Конечная точка
+            var startPoint = [50.05494, 72.95444]; // Темиртау, проспект Мира 102/4
+            var endPoint = [51.0222, 71.4669]; // Аэропорт Астаны
 
-            var myMap = new ymaps.Map("map", {
-                center: [50.05, 72.95], // Примерная центральная точка маршрута
+            var map = new ymaps.Map("map", {
+                center: startPoint,
                 zoom: 7
             });
 
-            var multiRoute = new ymaps.multiRouter.MultiRoute({
+            var route = new ymaps.multiRouter.MultiRoute({
                 referencePoints: [startPoint, endPoint],
-                params: { routingMode: "auto" } // Автомобильный маршрут
+                params: { routingMode: "auto" }
             }, {
-                routeStrokeColor: "#0000FF", // Голубая линия маршрута
-                routeStrokeWidth: 5,
-                wayPointStartIconColor: "#00FF00", // Зеленая начальная точка
-                wayPointFinishIconColor: "#FF0000" // Красная конечная точка
+                routeStrokeColor: "#0000FF", // Голубая линия
+                routeActiveStrokeWidth: 6
             });
 
-            myMap.geoObjects.add(multiRoute);
-
-            multiRoute.model.events.add("requestsuccess", function () {
-                var activeRoute = multiRoute.getActiveRoute();
+            route.model.events.add("requestsuccess", function () {
+                var activeRoute = route.getActiveRoute();
                 if (activeRoute) {
                     var time = activeRoute.properties.get("duration").text;
                     var distance = activeRoute.properties.get("distance").text;
-                    document.getElementById("route-info").innerText = "Примерное время пути: " + time + " | Расстояние: " + distance;
-                } else {
-                    document.getElementById("route-info").innerText = "Не удалось рассчитать маршрут.";
+                    document.getElementById("info").innerHTML = "Время в пути: " + time + "<br>Расстояние: " + distance;
                 }
             });
+
+            var endPlacemark = new ymaps.Placemark(endPoint, {
+                hintContent: "Аэропорт Астаны",
+                balloonContent: "Нажмите, чтобы открыть изображение"
+            }, {
+                preset: "islands#redDotIcon"
+            });
+
+            endPlacemark.events.add('click', function () {
+                document.getElementById('imageModal').style.display = 'flex';
+            });
+            
+            map.geoObjects.add(route);
+            map.geoObjects.add(endPlacemark);
         });
     </script>
 </body>
