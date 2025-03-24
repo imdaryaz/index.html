@@ -26,6 +26,34 @@
             text-align: center;
             z-index: 1000;
         }
+        #stockInfo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+        }
+        #stockInfo h2 {
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        #stockTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #stockTable td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        #stockTable td:first-child {
+            font-weight: bold;
+        }
         /* Модальное окно */
         #imageModal {
             display: none;
@@ -61,7 +89,23 @@
 <body>
     <div id="map"></div>
     <div id="info">Время в пути: рассчитывается...<br>Расстояние: рассчитывается...</div>
-
+    
+    <div id="stockInfo">
+        <h2>Сейчас в аппарате есть:</h2>
+        <table id="stockTable">
+            <tr><td>Полотенца</td><td>13 шт</td></tr>
+            <tr><td>Сланцы</td><td>21 шт</td></tr>
+            <tr><td>Дождевик</td><td>14 шт</td></tr>
+            <tr><td>Зарядное устройство</td><td>26 шт</td></tr>
+            <tr><td>Гели для душа</td><td>19 шт</td></tr>
+            <tr><td>Шампуни</td><td>20 шт</td></tr>
+            <tr><td>Зубная щетка</td><td>18 шт</td></tr>
+            <tr><td>Солнцезащитный крем</td><td>25 шт</td></tr>
+            <tr><td>Дезодорант</td><td>20 шт</td></tr>
+            <tr><td>Крем для рук</td><td>11 шт</td></tr>
+        </table>
+    </div>
+    
     <!-- Модальное окно -->
     <div id="imageModal">
         <img id="modalImage" src="2025-03-17_20-07-33.png" alt="Аэропорт Астаны">
