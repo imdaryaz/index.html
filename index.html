@@ -54,7 +54,24 @@
         #stockTable td:first-child {
             font-weight: bold;
         }
-        /* Модальное окно */
+        #directionBox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 300px;
+            line-height: 1.6;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1500;
+        }
+        #directionBox h3 {
+            margin-top: 0;
+            font-size: 18px;
+            text-align: center;
+        }
         #imageModal {
             display: none;
             position: fixed;
@@ -105,16 +122,25 @@
             <tr><td>Крем для рук</td><td>11 шт</td></tr>
         </table>
     </div>
-    
+
+    <div id="directionBox">
+        <h3>Пошаговая навигация:</h3>
+        <p>Зайдите в аэропорт через главный вход.</p>
+        <p>Поверните налево и пройдите 300 метров.</p>
+        <p>Поднимитесь на второй этаж и поверните направо.</p>
+        <p>Пройдите 100 метров прямо и вы у цели!</p>
+    </div>
+
     <!-- Модальное окно -->
     <div id="imageModal">
         <img id="modalImage" src="2025-03-17_20-07-33.png" alt="Аэропорт Астаны">
         <button id="closeModal">Закрыть</button>
+        <audio id="instructionAudio" src="1165c51aa1a3e513cbeac947b791a5a0.mp3"></audio>
     </div>
 
     <script>
         ymaps.ready(function () {
-            var startPoint = [50.053617, 72.960953]; // Обновленный адрес: Темиртау, проспект Бейбитшилик 102/4, Детский технопарк
+            var startPoint = [50.053617, 72.960953]; // Темиртау, проспект Бейбитшилик 102/4
             var endPoint = [51.0222, 71.4669]; // Аэропорт Астаны
 
             var map = new ymaps.Map("map", {
@@ -126,7 +152,7 @@
                 referencePoints: [startPoint, endPoint],
                 params: { routingMode: "auto" }
             }, {
-                routeStrokeColor: "#0000FF", // Голубая линия
+                routeStrokeColor: "#0000FF",
                 routeActiveStrokeWidth: 6
             });
 
@@ -148,10 +174,13 @@
 
             endPlacemark.events.add('click', function () {
                 document.getElementById('imageModal').style.display = 'flex';
+                document.getElementById('instructionAudio').play();
             });
 
             document.getElementById('closeModal').addEventListener('click', function () {
                 document.getElementById('imageModal').style.display = 'none';
+                document.getElementById('instructionAudio').pause();
+                document.getElementById('instructionAudio').currentTime = 0;
             });
 
             map.geoObjects.add(route);
