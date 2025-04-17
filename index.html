@@ -131,7 +131,6 @@
         <p>Пройдите 100 метров прямо и вы у цели!</p>
     </div>
 
-    <!-- Модальное окно -->
     <div id="imageModal">
         <img id="modalImage" src="2025-03-17_20-07-33.png" alt="Аэропорт Астаны">
         <button id="closeModal">Закрыть</button>
@@ -160,7 +159,7 @@
                 var activeRoute = route.getActiveRoute();
                 if (activeRoute) {
                     var time = activeRoute.properties.get("duration").text;
-                    var distance = "10 км"; // фиксированное значение
+                    var distance = activeRoute.properties.get("distance").text;
                     document.getElementById("info").innerHTML = "Время в пути: " + time + "<br>Расстояние: " + distance;
                 }
             });
