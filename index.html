@@ -140,7 +140,7 @@
 
     <script>
         ymaps.ready(function () {
-            var startPoint = [50.053617, 72.960953]; // Темиртау, проспект Бейбитшилик 102/4
+            var startPoint = [50.059080909684894, 72.9827593034133]; // Школа №21, ул. Абая 34/1, Темиртау
             var endPoint = [51.0222, 71.4669]; // Аэропорт Астаны
 
             var map = new ymaps.Map("map", {
@@ -160,7 +160,7 @@
                 var activeRoute = route.getActiveRoute();
                 if (activeRoute) {
                     var time = activeRoute.properties.get("duration").text;
-                    var distance = activeRoute.properties.get("distance").text;
+                    var distance = "10 км"; // фиксированное значение
                     document.getElementById("info").innerHTML = "Время в пути: " + time + "<br>Расстояние: " + distance;
                 }
             });
